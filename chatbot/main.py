@@ -52,7 +52,7 @@ KB_PATH = os.path.join(BASE_DIR, "kb.json")
 # ---------------------------------------------------------------------------
 # Groq API configuration
 # ---------------------------------------------------------------------------
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "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")
 
 # Chat model
 GROQ_CHAT_MODEL = "llama-3.3-70b-versatile"
@@ -318,7 +318,7 @@ def _weather_cache_key(lat: float, lon: float) -> str:
 
 
 def _get_openweather_key() -> str:
-    return (os.getenv("OPENWEATHER_API_KEY") or "").strip()
+    return (os.getenv("OPENWEATHER_API_KEY") or "5b9be1ed2e4dab460568005514d306d3").strip()
 
 
 async def _fetch_openweather_forecast(lat: float, lon: float) -> dict:

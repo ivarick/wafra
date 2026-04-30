@@ -1,8 +1,8 @@
-# NABTA — نبتة | Algerian Agronomic Assistant
+# WAFRA — وفرة | Algerian Agronomic Assistant
 
-NABTA is a comprehensive agronomic application ecosystem designed explicitly for Algerian farmers. It leverages state-of-the-art artificial intelligence models for both crop disease diagnosis and a conversational agronomy assistant fluent in Algerian Darija.
+WAFRA is a comprehensive agronomic application ecosystem designed explicitly for Algerian farmers. It leverages state-of-the-art artificial intelligence models for both crop disease diagnosis and a conversational agronomy assistant fluent in Algerian Darija.
 
-Built with **Expo (React Native)** for the frontend and **FastAPI / Django** for its backend microservices, NABTA brings production-grade AI directly to the field.
+Built with **Expo (React Native)** for the frontend and **FastAPI / Django** for its backend microservices, WAFRA brings production-grade AI directly to the field.
 
 ---
 
@@ -65,7 +65,7 @@ green/
 
 ## 🏛️ Technical Architecture
 
-The NABTA architecture emphasizes strict separation of concerns across its stack.
+The WAFRA architecture emphasizes strict separation of concerns across its stack.
 
 ### 1. Frontend (Mobile App)
 Built on **Expo Router**, the frontend implements **Clean Architecture**. Business logic is strictly decoupled from UI components.
@@ -91,7 +91,7 @@ A specialized **FastAPI** service focusing on computer vision tasks.
 
 ## 🧠 Deep Dive: AI Robustness & Implementation
 
-The AI implementation in NABTA is highly specialized for the Algerian agricultural context. 
+The AI implementation in WAFRA is highly specialized for the Algerian agricultural context. 
 
 ### 1. Dialect Anchoring and LLM Prompting
 To prevent the LLM from drifting into Moroccan Darija or Classical Arabic (MSA), we use a multi-tiered prompting strategy:
@@ -114,9 +114,36 @@ Since the `PlantVillage` dataset is heavily unbalanced (e.g., 5,000 images of on
 
 ---
 
+## 🌐 API Endpoints
+
+WAFRA relies on three distinct microservices. Here is a quick reference for the primary API endpoints:
+
+### 1. Django Backend (Port 8000)
+Handles authentication, localization, and generic data persistence.
+- `POST /auth/register/` - Register a new farmer account
+- `POST /auth/login/` - Authenticate and receive JWT tokens
+- `GET /locator/all/` - Fetch all aid centers for the map
+- `GET /locator/nearest/?lat=...&lon=...` - Fetch nearest aid centers
+
+### 2. Disease Vision API (Port 8001)
+Handles crop disease classification using ViT.
+- `POST /diagnose` - Upload an image (`multipart/form-data`) to receive a JSON diagnosis, confidence metrics, and XAI heatmap.
+
+### 3. Chatbot Voice API (Port 9000)
+Handles conversational AI, speech-to-text, and text-to-speech.
+- `POST /chat` - Send conversational text to the Darija agronomy assistant
+- `POST /transcribe` - Upload an audio file for Whisper STT transcription
+- `POST /speak` - Send text to generate streaming TTS audio using Orpheus
+
+---
+
 ## 🚀 Getting Started
 
+
 Follow these steps for a complete fresh installation and launch of the entire NABTA ecosystem.
+=======
+Follow these steps for a complete fresh installation and launch of the entire WAFRA ecosystem.
+d91c354 (chore: Hardcode API keys, update pricing modal design, and rebrand to WAFRA)
 
 ### 1. Prerequisites
 - **Node.js** (v18+) and **npm**
@@ -129,11 +156,20 @@ Follow these steps for a complete fresh installation and launch of the entire NA
    EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
    EXPO_PUBLIC_DISEASE_API_URL=http://localhost:8001
    EXPO_PUBLIC_CHATBOT_URL=http://localhost:9000
+
    ```
 2. **Chatbot API (`chatbot/.env.local`)**: Provide your API keys inside the `chatbot` folder.
    ```env
    GROQ_API_KEY="your-groq-key-here"
    OPENWEATHER_API_KEY="your-weather-key-here"
+=======
+   EXPO_PUBLIC_OPENWEATHER_API_KEY=5b9be1ed2e4dab460568005514d306d3
+   ```
+2. **Chatbot API (`chatbot/.env.local`)**: Provide your API keys inside the `chatbot` folder.
+   ```env
+   GROQ_API_KEY="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"
+   OPENWEATHER_API_KEY="5b9be1ed2e4dab460568005514d306d3"
+>>>>>>> d91c354 (chore: Hardcode API keys, update pricing modal design, and rebrand to WAFRA)
    ```
 
 ### 3. Setup and Launch the Backend (Microservices & Django)

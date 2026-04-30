@@ -29,8 +29,10 @@ function Ensure-Venv {
 
 Ensure-Venv -ProjectPath "chatbot" -VenvPath "chatbot\.venv" -RequirementsPath "chatbot\requirements.txt"
 Ensure-Venv -ProjectPath "disease" -VenvPath "disease\venv" -RequirementsPath "disease\requirements.txt"
+Ensure-Venv -ProjectPath "backend" -VenvPath "backend\.venv" -RequirementsPath "backend\requirements.txt"
 
 Write-Host ""
 Write-Host "Done." -ForegroundColor Green
 Write-Host "Chatbot activate: .\chatbot\.venv\Scripts\Activate.ps1" -ForegroundColor White
 Write-Host "Disease activate: .\disease\venv\Scripts\Activate.ps1" -ForegroundColor White
+Write-Host "Backend activate: .\backend\.venv\Scripts\Activate.ps1" -ForegroundColor White

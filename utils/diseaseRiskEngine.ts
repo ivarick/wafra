@@ -49,7 +49,7 @@ export async function fetchWeatherSignals(params: {
   lat: number;
   lon: number;
 }): Promise<WeatherSignal[]> {
-  const key = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY?.trim();
+  const key = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY?.trim() || "5b9be1ed2e4dab460568005514d306d3";
   if (!key) {
     return fallbackSignals();
   }

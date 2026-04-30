@@ -65,19 +65,18 @@ $env:OPENWEATHER_API_KEY = $previousOpenWeatherKey
 # ── Django backend (port 8000) ──────────────────────────────────────────────
 $djangoRoot   = "C:\Users\Ivarick\Desktop\green\backend"
 $djangoPython = "C:\Users\Ivarick\Desktop\green\backend\.venv\Scripts\python.exe"
+
 if (Test-Path $djangoPython) {
+    Write-Host "Applying Django migrations..." -ForegroundColor Cyan
+    Start-Process $djangoPython -ArgumentList "manage.py", "migrate" -WorkingDirectory $djangoRoot -Wait -NoNewWindow
+    
     Start-Process $djangoPython `
         -ArgumentList "manage.py", "runserver", "0.0.0.0:8000" `
         -WorkingDirectory $djangoRoot `
         -WindowStyle Normal
     Write-Host "Django API:  http://localhost:8000" -ForegroundColor Green
 } else {
-    Write-Host "Django venv not found. Map/locator features will be unavailable." -ForegroundColor Yellow
-    Write-Host "To set up: open a new terminal and run:" -ForegroundColor Yellow
-    Write-Host "  cd `"$djangoRoot`"" -ForegroundColor Yellow
-    Write-Host "  python -m venv .venv" -ForegroundColor Yellow
-    Write-Host "  .venv\Scripts\pip install -r requirements.txt" -ForegroundColor Yellow
-    Write-Host "  .venv\Scripts\python manage.py migrate" -ForegroundColor Yellow
+    Write-Host "Django venv not found. Ensure you run .\setup_venvs.ps1 first." -ForegroundColor Yellow
 }
 
 Write-Host "Disease API: http://localhost:8001" -ForegroundColor Green
