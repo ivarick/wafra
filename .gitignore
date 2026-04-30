@@ -1,0 +1,73 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+.env
+**/.env
+**/.env.*
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# generated native folders
+/ios
+/android
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# Logs and local runtime artifacts
+*.log
+chatbot/uvicorn.out
+chatbot/uvicorn.err
+chatbot/uvicorn-live.out
+chatbot/uvicorn-live.err
+chatbot/voice-test.wav
+
+# Local databases and machine-specific output
+*.sqlite3
+backend/db.sqlite3
+
+# Model caches and backup copies
+disease/model/
+Hack_Backend-main/

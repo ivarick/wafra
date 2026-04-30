@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agronomy Input Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <div class="glass-panel">
+            <header>
+                <h1>AgriCalc Pro</h1>
+                <p>Real-Time Smart Input Calculator</p>
+            </header>
+            
+            <div class="form-group">
+                <label for="cropInput">Select Crop</label>
+                <select id="cropInput">
+                    <option value="" disabled selected>Choose a crop...</option>
+                    <option value="potato">🥔 Potato (Pomme de terre)</option>
+                    <option value="lettuce">🥬 Lettuce (Laitue)</option>
+                    <option value="onion">🧅 Onion (Oignon)</option>
+                    <option value="pepper">🫑 Pepper (Poivron)</option>
+                    <option value="tomato">🍅 Tomato (Industrial)</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="areaInput">Area (Hectares)</label>
+                    <input type="number" id="areaInput" min="0.1" step="0.1" placeholder="e.g. 2.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="stageInput">Growth Stage</label>
+                    <select id="stageInput" disabled>
+                        <option value="" disabled selected>Select crop first...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="resultsPanel" class="results-panel">
+                <h2>Recommended Outputs</h2>
+                <div class="results-grid">
+                    <div class="result-card n-card">
+                        <h3>Nitrogen (N)</h3>
+                        <p id="nResult">0 <span class="unit">kg</span></p>
+                    </div>
+                    <div class="result-card p-card">
+                        <h3>Phosphorus (P₂O₅)</h3>
+                        <p id="pResult">0 <span class="unit">kg</span></p>
+                    </div>
+                    <div class="result-card k-card">
+                        <h3>Potassium (K₂O)</h3>
+                        <p id="kResult">0 <span class="unit">kg</span></p>
+                    </div>
+                    <div class="result-card water-card">
+                        <h3>Daily Irrigation</h3>
+                        <p id="waterResult">0 <span class="unit">Liters</span></p>
+                    </div>
+                </div>
+                <p id="errorMessage" class="error-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

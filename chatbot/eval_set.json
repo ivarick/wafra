@@ -1,0 +1,14 @@
+[
+  {
+    "query": "rani 3andi btata sfar",
+    "expected": "mildiou ou manque azote"
+  },
+  {
+    "query": "Tomate feuilles avec taches jaunes apres humidite",
+    "expected": "risque mildiou"
+  },
+  {
+    "query": "Temperature 38 et feuilles faibles",
+    "expected": "stress thermique et irrigation"
+  }
+]

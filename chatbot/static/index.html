@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ar" dir="auto">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WAFRA | Algerian Agronomic Chatbot</title>
+<meta name="description" content="WAFRA is an agronomic chatbot for Algerian farmers in Darija, French, and Arabic."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080e0a;
+  --surface:#0f1a10;
+  --surface2:#162118;
+  --border:rgba(100,220,80,0.1);
+  --border2:rgba(100,220,80,0.18);
+  --text:#dff0d8;
+  --text2:#8aab82;
+  --accent:#5dba3e;
+  --accent2:#7edc58;
+  --accent-glow:rgba(93,186,62,0.2);
+  --accent-glow2:rgba(93,186,62,0.08);
+  --red:#f87171;
+  --amber:#fbbf24;
+  --r:16px;
+  --r2:10px;
+}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  height:100dvh;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 0%,rgba(60,140,30,0.12) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 100%,rgba(30,90,15,0.10) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+header{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(8,14,10,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  z-index:10;
+}
+
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#3a8c1e,#5dba3e);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1rem;
+  font-weight:700;
+  box-shadow:0 0 18px rgba(93,186,62,0.35);
+}
+
+.logo-text h1{font-size:1.06rem;font-weight:700;color:var(--accent2);letter-spacing:-0.02em}
+.logo-text p{font-size:0.7rem;color:var(--text2);font-weight:300}
+
+.lang-pills{display:flex;gap:6px}
+.lang-pill{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:0.68rem;
+  font-weight:500;
+  border:1px solid var(--border2);
+  background:transparent;
+  color:var(--text2);
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.lang-pill:hover{background:var(--accent-glow);color:var(--accent2);border-color:var(--accent)}
+
+#api-banner{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 20px;
+  background:rgba(251,191,36,0.07);
+  border-bottom:1px solid rgba(251,191,36,0.15);
+  position:relative;
+  z-index:9;
+}
+#api-banner p{font-size:0.75rem;color:var(--amber);flex:1}
+#api-key-input{
+  flex:1;
+  max-width:360px;
+  padding:7px 12px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(251,191,36,0.3);
+  color:var(--text);
+  font-size:0.78rem;
+  font-family:inherit;
+  outline:none;
+}
+#api-key-input:focus{border-color:var(--amber)}
+#api-key-input::placeholder{color:rgba(255,255,255,0.25)}
+#save-key-btn{
+  padding:7px 14px;
+  border-radius:8px;
+  background:rgba(251,191,36,0.15);
+  border:1px solid rgba(251,191,36,0.3);
+  color:var(--amber);
+  font-size:0.75rem;
+  font-family:inherit;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+#save-key-btn:hover{background:rgba(251,191,36,0.25)}
+#api-status{font-size:0.72rem;color:var(--accent2);white-space:nowrap;display:none}
+
+#suggestions{
+  flex-shrink:0;
+  padding:10px 16px;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+  background:rgba(8,14,10,0.6);
+  position:relative;
+  z-index:8;
+}
+.chip{
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid var(--border2);
+  background:var(--accent-glow2);
+  color:var(--text2);
+  font-size:0.72rem;
+  font-family:inherit;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.chip:hover{background:var(--accent-glow);color:var(--accent2);border-color:var(--accent)}
+
+#messages{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  position:relative;
+  z-index:1;
+  scroll-behavior:smooth;
+}
+#messages::-webkit-scrollbar{width:4px}
+#messages::-webkit-scrollbar-track{background:transparent}
+#messages::-webkit-scrollbar-thumb{background:rgba(93,186,62,0.2);border-radius:999px}
+
+#welcome{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  flex:1;
+  padding:40px 20px;
+  gap:18px;
+  animation:fadeIn 0.5s ease;
+}
+.welcome-icon{
+  width:74px;
+  height:74px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#2a6a10,#5dba3e);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  font-weight:700;
+  box-shadow:0 0 40px rgba(93,186,62,0.3),0 0 80px rgba(93,186,62,0.1);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 30px rgba(93,186,62,0.3),0 0 60px rgba(93,186,62,0.1)}
+  50%{box-shadow:0 0 50px rgba(93,186,62,0.5),0 0 100px rgba(93,186,62,0.2)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+#welcome h2{font-size:1.4rem;font-weight:700;color:var(--accent2);letter-spacing:-0.02em}
+#welcome p{font-size:0.84rem;color:var(--text2);max-width:420px;line-height:1.65}
+.welcome-langs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.welcome-lang{
+  padding:6px 14px;
+  border-radius:999px;
+  background:var(--accent-glow2);
+  border:1px solid var(--border2);
+  font-size:0.75rem;
+  color:var(--text2);
+}
+
+.msg{display:flex;gap:10px;animation:fadeUp 0.3s ease}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.8rem;
+  font-weight:700;
+}
+.msg.assistant .msg-avatar{background:linear-gradient(135deg,#2a6a10,#5dba3e)}
+.msg.user .msg-avatar{background:rgba(255,255,255,0.08);border:1px solid var(--border)}
+
+.msg-bubble{
+  max-width:78%;
+  padding:12px 16px;
+  border-radius:var(--r);
+  font-size:0.85rem;
+  line-height:1.65;
+}
+.msg.assistant .msg-bubble{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-bottom-left-radius:4px;
+  color:var(--text);
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,rgba(60,140,30,0.25),rgba(93,186,62,0.15));
+  border:1px solid rgba(93,186,62,0.2);
+  border-bottom-right-radius:4px;
+  color:var(--text);
+}
+.msg-bubble[dir="rtl"]{
+  text-align:right;
+  font-family:'Amiri',serif;
+  font-size:0.96rem;
+  line-height:1.85;
+}
+
+.typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing-dots span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  opacity:0.6;
+  animation:bounce 1.2s infinite ease-in-out;
+}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{
+  0%,80%,100%{transform:translateY(0)}
+  40%{transform:translateY(-6px);opacity:1}
+}
+
+.msg-error{
+  font-size:0.8rem;
+  color:var(--red);
+  padding:10px 14px;
+  border-radius:10px;
+  background:rgba(248,113,113,0.07);
+  border:1px solid rgba(248,113,113,0.2);
+  margin:0 42px;
+}
+
+#voice-panel{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 16px;
+  background:rgba(8,14,10,0.78);
+  border-top:1px solid var(--border);
+  position:relative;
+  z-index:9;
+}
+.voice-meta{display:flex;flex-direction:column;gap:4px;min-width:0}
+#voice-badge{
+  display:inline-flex;
+  align-items:center;
+  width:fit-content;
+  padding:5px 10px;
+  border-radius:999px;
+  background:var(--accent-glow2);
+  border:1px solid var(--border2);
+  color:var(--accent2);
+  font-size:0.72rem;
+  font-weight:600;
+}
+#voice-status{
+  font-size:0.74rem;
+  color:var(--text2);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:min(58vw,420px);
+}
+#voice-status.error{color:var(--red)}
+.voice-actions{display:flex;align-items:center;gap:8px}
+#voice-language{
+  padding:8px 10px;
+  border-radius:10px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text);
+  font-size:0.76rem;
+  font-family:inherit;
+  outline:none;
+}
+.voice-toggle{
+  min-width:92px;
+  height:40px;
+  padding:0 12px;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background:var(--surface2);
+  color:var(--text2);
+  font-size:0.76rem;
+  font-weight:600;
+  font-family:inherit;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.voice-toggle:hover{border-color:var(--accent);color:var(--accent2)}
+.voice-toggle.active{
+  background:linear-gradient(135deg,rgba(58,140,30,0.28),rgba(93,186,62,0.18));
+  border-color:rgba(93,186,62,0.35);
+  color:var(--accent2);
+  box-shadow:0 0 0 3px var(--accent-glow2);
+}
+
+#input-bar{
+  flex-shrink:0;
+  padding:12px 16px;
+  background:rgba(8,14,10,0.9);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);
+  display:flex;
+  gap:10px;
+  align-items:flex-end;
+  position:relative;
+  z-index:10;
+}
+#msg-input{
+  flex:1;
+  padding:11px 14px;
+  border-radius:var(--r2);
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:0.88rem;
+  line-height:1.5;
+  resize:none;
+  outline:none;
+  min-height:44px;
+  max-height:120px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+#msg-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow2)}
+#msg-input::placeholder{color:rgba(138,171,130,0.4)}
+
+#voice-btn,
+#send-btn{
+  width:44px;
+  height:44px;
+  border-radius:var(--r2);
+  border:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:all 0.2s;
+}
+#send-btn{
+  background:linear-gradient(135deg,#3a8c1e,#5dba3e);
+  box-shadow:0 4px 12px rgba(93,186,62,0.3);
+}
+#send-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(93,186,62,0.45)}
+#voice-btn{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  font-size:0.75rem;
+  font-weight:700;
+  font-family:inherit;
+}
+#voice-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent2);transform:translateY(-1px)}
+#voice-btn.recording{
+  background:rgba(248,113,113,0.12);
+  border-color:rgba(248,113,113,0.35);
+  color:#fecaca;
+  box-shadow:0 0 0 4px rgba(248,113,113,0.08);
+}
+#voice-btn:disabled,
+#send-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+#send-btn svg{transition:transform 0.2s}
+
+.input-hint{
+  text-align:center;
+  font-size:0.65rem;
+  color:rgba(138,171,130,0.35);
+  padding:4px 0 6px;
+  position:relative;
+  z-index:10;
+  background:rgba(8,14,10,0.9);
+}
+
+.msg-bubble strong{color:var(--accent2);font-weight:600}
+.msg-bubble em{color:var(--text2);font-style:normal;font-size:0.82rem}
+.msg-bubble code{
+  background:rgba(93,186,62,0.1);
+  color:var(--accent2);
+  padding:1px 6px;
+  border-radius:4px;
+  font-size:0.8rem;
+  font-family:monospace;
+}
+
+@media(max-width:600px){
+  .logo-text p{display:none}
+  .lang-pills{display:none}
+  .msg-bubble{max-width:88%;font-size:0.82rem}
+  #suggestions{padding:8px 12px}
+  #voice-panel{flex-direction:column;align-items:stretch}
+  #voice-status{max-width:100%;white-space:normal}
+  .voice-actions{justify-content:space-between}
+  .voice-toggle{min-width:84px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">NB</div>
+    <div class="logo-text">
+      <h1>WAFRA</h1>
+      <p>Algerian agronomic assistant in real Darija, French, and Arabic</p>
+    </div>
+  </div>
+  <div class="lang-pills">
+    <button class="lang-pill" onclick="insertSample('darija')">Darija</button>
+    <button class="lang-pill" onclick="insertSample('french')">Francais</button>
+    <button class="lang-pill" onclick="insertSample('arabic')">Arabic</button>
+  </div>
+</header>
+
+<div id="api-banner">
+  <p>Enter your Groq API key to unlock chat, speech-to-text, and voice replies.</p>
+  <input id="api-key-input" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+  <button id="save-key-btn" onclick="saveKey()">Save</button>
+  <span id="api-status">Key saved</span>
+</div>
+
+<div id="suggestions">
+  <button class="chip" onclick="sendChip(this)">واش ندير للطماطم إذا ولات صفرا؟</button>
+  <button class="chip" onclick="sendChip(this)">Comment irriguer les dattes en été ?</button>
+  <button class="chip" onclick="sendChip(this)">واش هو وقت زراعة القمح في سطيف؟</button>
+  <button class="chip" onclick="sendChip(this)">Pucerons sur poivrons, que faire ?</button>
+  <button class="chip" onclick="sendChip(this)">علاه أوراق البطاطا راهي تصفر؟</button>
+</div>
+
+<div id="messages">
+  <div id="welcome">
+    <div class="welcome-icon">NB</div>
+    <h2>Bonjour. Salam. Marhba.</h2>
+    <p>WAFRA answers in Algerian Darija, French, or Arabic and supports voice input plus spoken replies. For the most natural Algerian Darija, keep the profile on <strong style="color:var(--accent2)">Darija DZ</strong> and write or speak the way you normally do in Algeria.</p>
+    <div class="welcome-langs">
+      <span class="welcome-lang">Darija DZ</span>
+      <span class="welcome-lang">Francais</span>
+      <span class="welcome-lang">Arabic</span>
+    </div>
+  </div>
+</div>
+
+<div id="voice-panel">
+  <div class="voice-meta">
+    <span id="voice-badge">Voice DZ</span>
+    <p id="voice-status">Voice ready for Algerian Darija.</p>
+  </div>
+  <div class="voice-actions">
+    <select id="voice-language" aria-label="Voice language">
+      <option value="darija">Darija DZ</option>
+      <option value="arabic">Arabic</option>
+      <option value="french">Francais</option>
+    </select>
+    <button id="speaker-btn" class="voice-toggle active" type="button" onclick="toggleAutoSpeak()">Voice On</button>
+  </div>
+</div>
+
+<div id="input-bar">
+  <button id="voice-btn" type="button" onclick="toggleRecording()" title="Record voice">Mic</button>
+  <textarea id="msg-input" rows="1" placeholder="اكتب سؤالك بالدّارجة الجزائرية ولا سجّل صوتك..."></textarea>
+  <button id="send-btn" onclick="sendMessage()" title="Send">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </svg>
+  </button>
+</div>
+<div class="input-hint">WAFRA voice mode uses server transcription for better Darija recognition.</div>
+
+<script>
+let conversationHistory = [];
+let isLoading = false;
+const EMBEDDED_KEY = '';
+let apiKey = localStorage.getItem('wafra_api_key') || EMBEDDED_KEY;
+let voiceLanguage = localStorage.getItem('wafra_voice_language') || 'darija';
+let autoSpeakEnabled = (localStorage.getItem('wafra_auto_speak') || 'true') === 'true';
+let mediaRecorder = null;
+let mediaStream = null;
+let recordingChunks = [];
+let isRecording = false;
+let activeAudio = null;
+let activeAudioUrl = null;
+const canRecordAudio = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+
+(function init() {
+  const input = document.getElementById('api-key-input');
+  const banner = document.getElementById('api-banner');
+  const status = document.getElementById('api-status');
+  if (apiKey) {
+    input.value = apiKey;
+    status.style.display = 'inline';
+    banner.style.background = 'rgba(93,186,62,0.05)';
+    banner.style.borderBottomColor = 'rgba(93,186,62,0.1)';
+    document.querySelector('#api-banner p').style.color = 'rgba(138,171,130,0.6)';
+    document.querySelector('#api-banner p').textContent = 'Groq API key configured. WAFRA is ready.';
+  }
+
+  const msgInput = document.getElementById('msg-input');
+  msgInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+  msgInput.addEventListener('input', syncComposerState);
+
+  const voiceLanguageSelect = document.getElementById('voice-language');
+  voiceLanguageSelect.value = voiceLanguage;
+  voiceLanguageSelect.addEventListener('change', updateVoiceLanguage);
+
+  updateVoiceLanguage();
+  syncComposerState();
+  syncVoiceUi();
+
+  if (!canRecordAudio) {
+    document.getElementById('voice-btn').disabled = true;
+    setVoiceStatus('This browser cannot record audio. Text chat still works.', true);
+  }
+})();
+
+function syncComposerState() {
+  const input = document.getElementById('msg-input');
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+}
+
+function saveKey() {
+  const value = document.getElementById('api-key-input').value.trim();
+  if (!value) return;
+  apiKey = value;
+  localStorage.setItem('wafra_api_key', value);
+  const status = document.getElementById('api-status');
+  status.style.display = 'inline';
+  const banner = document.getElementById('api-banner');
+  banner.style.background = 'rgba(93,186,62,0.05)';
+  banner.style.borderBottomColor = 'rgba(93,186,62,0.1)';
+  document.querySelector('#api-banner p').style.color = 'rgba(138,171,130,0.6)';
+  document.querySelector('#api-banner p').textContent = 'Groq API key configured. WAFRA is ready.';
+  setVoiceStatus('Voice services are ready.');
+}
+
+function setVoiceStatus(message, isError=false) {
+  const status = document.getElementById('voice-status');
+  status.textContent = message;
+  status.classList.toggle('error', !!isError);
+}
+
+function syncVoiceUi() {
+  const speakerBtn = document.getElementById('speaker-btn');
+  const badge = document.getElementById('voice-badge');
+  speakerBtn.classList.toggle('active', autoSpeakEnabled);
+  speakerBtn.textContent = autoSpeakEnabled ? 'Voice On' : 'Voice Off';
+
+  const badgeLabels = {
+    darija: 'Voice DZ',
+    arabic: 'Voice AR',
+    french: 'Voice FR'
+  };
+  badge.textContent = badgeLabels[voiceLanguage] || 'Voice';
+
+  if (isRecording) {
+    setVoiceStatus('Recording... tap Mic again to stop.');
+    return;
+  }
+
+  const readyLabels = {
+    darija: 'Voice ready for Algerian Darija.',
+    arabic: 'Voice ready for Arabic.',
+    french: 'Voice ready for French.'
+  };
+  setVoiceStatus(readyLabels[voiceLanguage] || 'Voice ready.');
+}
+
+function updateVoiceLanguage() {
+  voiceLanguage = document.getElementById('voice-language').value;
+  localStorage.setItem('wafra_voice_language', voiceLanguage);
+  const input = document.getElementById('msg-input');
+  if (voiceLanguage === 'darija' || voiceLanguage === 'arabic') input.setAttribute('dir', 'rtl');
+  else input.removeAttribute('dir');
+  syncVoiceUi();
+}
+
+function toggleAutoSpeak() {
+  autoSpeakEnabled = !autoSpeakEnabled;
+  localStorage.setItem('wafra_auto_speak', String(autoSpeakEnabled));
+  if (!autoSpeakEnabled) stopActiveVoice();
+  syncVoiceUi();
+}
+
+function isArabicVoiceProfile() {
+  return voiceLanguage === 'darija' || voiceLanguage === 'arabic';
+}
+
+function isRTL(text) {
+  const rtlChars = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+  return rtlChars.test(text || '');
+}
+
+function detectSpeechLanguage(text='') {
+  if (voiceLanguage === 'french') return 'fr';
+  if (isArabicVoiceProfile()) return 'ar';
+  if (isRTL(text)) return 'ar';
+  if (/[àâçéèêëîïôùûü]/i.test(text) || /\b(bonjour|irrigation|engrais|maladie|traitement)\b/i.test(text)) return 'fr';
+  return 'en';
+}
+
+function stopActiveVoice() {
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio = null;
+  }
+  if (activeAudioUrl) {
+    URL.revokeObjectURL(activeAudioUrl);
+    activeAudioUrl = null;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+function speakWithBrowser(text, language) {
+  if (!('speechSynthesis' in window)) return false;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = language === 'fr' ? 'fr-FR' : 'en-US';
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(voice => voice.lang.toLowerCase().startsWith(utterance.lang.toLowerCase().slice(0, 2)));
+  if (preferred) utterance.voice = preferred;
+  utterance.onstart = () => setVoiceStatus('Assistant voice playback started.');
+  utterance.onend = () => syncVoiceUi();
+  utterance.onerror = () => setVoiceStatus('Browser voice playback failed.', true);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+  return true;
+}
+
+async function playAssistantVoice(text) {
+  if (!autoSpeakEnabled || !text) return;
+  stopActiveVoice();
+  const language = detectSpeechLanguage(text);
+
+  if (language === 'fr') {
+    if (!speakWithBrowser(text, language)) {
+      setVoiceStatus('No French browser voice is available here.', true);
+    }
+    return;
+  }
+
+  try {
+    setVoiceStatus('Generating voice reply...');
+    const response = await fetch('/voice/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        api_key: apiKey,
+        language_hint: language
+      })
+    });
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({ detail: 'Voice playback failed.' }));
+      throw new Error(errorPayload.detail || 'Voice playback failed.');
+    }
+
+    const audioBlob = await response.blob();
+    activeAudioUrl = URL.createObjectURL(audioBlob);
+    activeAudio = new Audio(activeAudioUrl);
+    activeAudio.onplay = () => setVoiceStatus(language === 'ar' ? 'Playing Darija voice reply.' : 'Playing voice reply.');
+    activeAudio.onended = () => syncVoiceUi();
+    activeAudio.onerror = () => setVoiceStatus('Audio playback failed in the browser.', true);
+    await activeAudio.play();
+  } catch (error) {
+    if (!speakWithBrowser(text, language)) {
+      setVoiceStatus(error.message || 'Voice playback failed.', true);
+    }
+  }
+}
+
+async function toggleRecording() {
+  if (!canRecordAudio) {
+    setVoiceStatus('Microphone recording is not supported in this browser.', true);
+    return;
+  }
+  if (!apiKey) {
+    setVoiceStatus('Save the Groq API key before using voice mode.', true);
+    document.getElementById('api-key-input').focus();
+    return;
+  }
+
+  if (isRecording) {
+    if (mediaRecorder) mediaRecorder.stop();
+    return;
+  }
+
+  try {
+    stopActiveVoice();
+    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordingChunks = [];
+    mediaRecorder = new MediaRecorder(mediaStream);
+
+    mediaRecorder.ondataavailable = event => {
+      if (event.data && event.data.size) recordingChunks.push(event.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const mimeType = mediaRecorder && mediaRecorder.mimeType ? mediaRecorder.mimeType : 'audio/webm';
+      const audioBlob = new Blob(recordingChunks, { type: mimeType });
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+      isRecording = false;
+      const voiceBtn = document.getElementById('voice-btn');
+      voiceBtn.classList.remove('recording');
+      voiceBtn.textContent = 'Mic';
+      await transcribeRecording(audioBlob);
+    };
+
+    mediaRecorder.start();
+    isRecording = true;
+    const voiceBtn = document.getElementById('voice-btn');
+    voiceBtn.classList.add('recording');
+    voiceBtn.textContent = 'Stop';
+    syncVoiceUi();
+  } catch (error) {
+    setVoiceStatus('Microphone access was blocked. Allow access and try again.', true);
+  }
+}
+
+async function transcribeRecording(audioBlob) {
+  try {
+    setVoiceStatus('Transcribing your voice...');
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'wafra-voice.webm');
+    formData.append('api_key', apiKey);
+    formData.append('language', voiceLanguage);
+
+    const response = await fetch('/voice/transcribe', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({ detail: 'Voice transcription failed.' }));
+      throw new Error(errorPayload.detail || 'Voice transcription failed.');
+    }
+
+    const data = await response.json();
+    const input = document.getElementById('msg-input');
+    input.value = data.text || '';
+    syncComposerState();
+    input.focus();
+    if (data.language === 'ar') input.setAttribute('dir', 'rtl');
+    else input.removeAttribute('dir');
+    setVoiceStatus('Transcript ready. Review it, then tap send.');
+  } catch (error) {
+    setVoiceStatus(error.message || 'Voice transcription failed.', true);
+  }
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`(.*?)`/g,'<code>$1</code>')
+    .replace(/^#{1,3}\s(.+)$/gm,'<strong>$1</strong>')
+    .replace(/^- (.+)$/gm,'&bull; $1')
+    .replace(/\n\n/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+
+function appendMessage(role, content, isError=false) {
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+
+  const messages = document.getElementById('messages');
+
+  if (isError) {
+    const errorBubble = document.createElement('div');
+    errorBubble.className = 'msg-error';
+    errorBubble.textContent = content;
+    messages.appendChild(errorBubble);
+    messages.scrollTop = messages.scrollHeight;
+    return errorBubble;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = role === 'assistant' ? 'NB' : 'U';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (isRTL(content)) bubble.setAttribute('dir', 'rtl');
+  if (role === 'assistant') bubble.innerHTML = renderMarkdown(content);
+  else bubble.textContent = content;
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  messages.appendChild(wrap);
+  messages.scrollTop = messages.scrollHeight;
+  return wrap;
+}
+
+function showTyping() {
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+  const messages = document.getElementById('messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg assistant';
+  wrap.id = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = 'NB';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  messages.appendChild(wrap);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function hideTyping() {
+  const typing = document.getElementById('typing-indicator');
+  if (typing) typing.remove();
+}
+
+async function sendMessage(text) {
+  if (isLoading) return;
+  const input = document.getElementById('msg-input');
+  const userText = (text || input.value).trim();
+  if (!userText) return;
+
+  if (!apiKey) {
+    document.getElementById('api-key-input').focus();
+    document.getElementById('api-key-input').style.borderColor = 'var(--amber)';
+    appendMessage('assistant', 'Save your Groq API key above before using WAFRA.', true);
+    return;
+  }
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendMessage('user', userText);
+  conversationHistory.push({ role: 'user', content: userText });
+
+  isLoading = true;
+  document.getElementById('send-btn').disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: conversationHistory,
+        api_key: apiKey,
+        voice_mode: autoSpeakEnabled || isArabicVoiceProfile(),
+        language_hint: voiceLanguage
+      })
+    });
+
+    hideTyping();
+
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => ({ detail: response.statusText }));
+      throw new Error(errorPayload.detail || 'Server error');
+    }
+
+    const data = await response.json();
+    appendMessage('assistant', data.reply);
+    conversationHistory.push({ role: 'assistant', content: data.reply });
+    await playAssistantVoice(data.reply);
+  } catch (error) {
+    hideTyping();
+    appendMessage('assistant', `Connection error: ${error.message || 'Unable to reach the service.'}`, true);
+    conversationHistory.pop();
+  } finally {
+    isLoading = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('msg-input').focus();
+    syncVoiceUi();
+  }
+}
+
+function sendChip(button) {
+  sendMessage(button.textContent.trim());
+}
+
+const samples = {
+  darija: 'واش ندير للطماطم كي تولي صفرا من التحت وفيها بقع؟',
+  french: 'Mes plants de tomates ont des taches brunes sur les feuilles. Est-ce le mildiou ?',
+  arabic: 'ما هو الوقت المناسب لزراعة القمح في منطقة سطيف؟'
+};
+
+function insertSample(lang) {
+  const input = document.getElementById('msg-input');
+  input.value = samples[lang] || '';
+  syncComposerState();
+  input.focus();
+  if (lang !== 'french') input.setAttribute('dir', 'rtl');
+  else input.removeAttribute('dir');
+}
+</script>
+</body>
+</html>

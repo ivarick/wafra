@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tomato_mildiou_1",
+    "crop": "tomate",
+    "disease": "mildiou",
+    "symptoms": "Taches jaunes sur la face superieure des feuilles, duvet blanchatre sous la feuille, progression rapide apres nuits humides.",
+    "treatment": "Appliquer mancozeb tous les 7 jours, retirer les feuilles fortement atteintes, eviter l'arrosage par aspersion tardive et renforcer l'aeration.",
+    "region": "mediterranean",
+    "source": "ITGC guide",
+    "content": "Le mildiou de la tomate apparait souvent quand l'humidite depasse 80% avec temperature moderee. Les premieres lesions deviennent rapidement necrotiques. Sur le terrain algerien, la prevention repose sur l'aeration de la serre, l'irrigation au sol et un programme fongicide precoce."
+  },
+  {
+    "id": "potato_late_blight_1",
+    "crop": "pomme de terre",
+    "disease": "mildiou",
+    "symptoms": "Taches huileuses brun-vert sur feuilles, noircissement des tiges, aggravation apres pluie ou rosee persistante.",
+    "treatment": "Traitement preventif mancozeb ou chlorothalonil, assainissement des foyers, rotation culturale et surveillance 48h apres episodes humides.",
+    "region": "highlands",
+    "source": "INRAA technical note",
+    "content": "Le mildiou de la pomme de terre explose sous conditions humides et temperatures douces. Une strategie locale combine traitement protectant, bonne ventilation et destruction des fanes malades."
+  },
+  {
+    "id": "wheat_brown_rust_1",
+    "crop": "ble",
+    "disease": "rouille brune",
+    "symptoms": "Petites pustules brunes sur feuilles, reduction de surface photosynthetique, baisse de rendement si non maitrisee.",
+    "treatment": "Surveiller stade tallage-epiaison, appliquer fongicide homologue en cas de progression, ajuster fertilisation azotee pour eviter exces.",
+    "region": "semi-arid",
+    "source": "FAO North Africa cereals brief",
+    "content": "La rouille brune du ble augmente avec humidite elevee et couvert foliaire dense. L'approche integree melange varietes tolerantes, nutrition equilibree et intervention ciblee."
+  },
+  {
+    "id": "date_palm_wilt_1",
+    "crop": "palmier dattier",
+    "disease": "fletrissement",
+    "symptoms": "Jaunissement progressif des palmes, dessechement des folioles, affaiblissement general de l'arbre.",
+    "treatment": "Isoler les sujets suspects, ameliorer drainage, desinfecter outils, programme phytosanitaire local valide par cooperative.",
+    "region": "saharan",
+    "source": "CCLS cooperative bulletin",
+    "content": "Dans les oasis sahariennes, le fletrissement du palmier peut etre aggrave par stress hydrique et pratiques sanitaires faibles. Les interventions precoces reduisent les pertes."
+  },
+  {
+    "id": "greenhouse_powdery_mildew_biskra_1",
+    "crop": "poivron",
+    "disease": "oidium",
+    "symptoms": "Poudre blanche sur face superieure, enroulement des feuilles, ralentissement de croissance en serre.",
+    "treatment": "Diminuer humidite nocturne, ouvrir ventilation matin et soir, traitement soufre ou produit homologue selon stade.",
+    "region": "biskra_greenhouse",
+    "source": "Biskra greenhouse tomato guide",
+    "content": "L'oidium en serre prospere sous microclimat humide avec echanges d'air faibles. La prevention combine conduite climatique, espacement et surveillance rapprochee."
+  }
+]

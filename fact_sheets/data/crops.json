@@ -1,0 +1,449 @@
+{
+  "_metadata": {
+    "description": "Database of Algeria's 10 key crops for the NABTA agricultural assistant.",
+    "language_codes": "ISO 639-1 (ar = Arabic, fr = French, en = English)",
+    "yield_units": "q/ha = quintaux per hectare (1 q = 100 kg). t/ha = metric tons per hectare.",
+    "water_units": "mm = millimeters of water over full growing cycle. m3/ha = cubic meters per hectare.",
+    "data_year_range": "2016-2024 (most recent national data available)",
+    "primary_sources": [
+      "FAO (Food and Agriculture Organization) - faostat.fao.org",
+      "FAO Land & Water Crop Information Database",
+      "ITGC (Institut Technique des Grandes Cultures, Algeria) - itgc.dz",
+      "ITCMI (Institut Technique des Cultures Maraicheres et Industrielles, Algeria)",
+      "MADR (Ministere de l'Agriculture et du Developpement Rural, Algeria) - madr.gov.dz",
+      "Agrichem Algerie - agrichem.dz",
+      "USDA FAS Algeria Grain Annual Report 2025",
+      "AgriAlgerie official agricultural news"
+    ],
+    "disclaimer": "Yields are national averages and vary significantly by region, irrigation, and variety. Always consult local agronomists for specific recommendations."
+  },
+
+  "crops": [
+    {
+      "id": "wheat",
+      "name_ar": "قمح",
+      "name_fr": "Blé",
+      "name_en": "Wheat",
+      "name_darija": "gamh / گمح",
+      "scientific_name": "Triticum aestivum / Triticum durum",
+      "category": "cereal",
+      "icon": "🌾",
+      "planting_calendar": {
+        "sow_months": ["October", "November", "December"],
+        "harvest_months": ["May", "June", "July"],
+        "cycle_days": "180-250",
+        "notes_fr": "Semis d'automne. Le blé dur représente environ 45% de la surface céréalière algérienne, le blé tendre environ 15%. Adapté aux Hauts Plateaux et zones méditerranéennes."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "450-650",
+        "irrigation_type": "Pluvial principalement; irrigation d'appoint dans 10% des surfaces",
+        "critical_stages_fr": "Tallage et remplissage du grain"
+      },
+      "diseases": [
+        { "name_fr": "Rouille brune", "name_ar": "الصدأ البني", "scientific": "Puccinia triticina", "severity": "high" },
+        { "name_fr": "Septoriose", "name_ar": "السبتوريوز", "scientific": "Zymoseptoria tritici", "severity": "high" },
+        { "name_fr": "Oïdium", "name_ar": "البياض الدقيقي", "scientific": "Blumeria graminis", "severity": "medium" },
+        { "name_fr": "Fusariose de l'épi", "name_ar": "تعفن السنابل", "scientific": "Fusarium graminearum", "severity": "medium" },
+        { "name_fr": "Rouille jaune", "name_ar": "الصدأ الأصفر", "scientific": "Puccinia striiformis", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "16-20 q/ha",
+        "average_t_per_ha": "1.6-2.0",
+        "potential": "30-40 q/ha (objectif gouvernemental); jusqu'à 72 q/ha en irrigué (variété Boussalem)",
+        "note_fr": "Rendement national moyen autour de 17 q/ha. Forte variabilité selon pluviométrie."
+      },
+      "main_regions_fr": ["Sétif", "Tiaret", "Constantine", "Bordj Bou Arreridj", "Guelma", "Oum El Bouaghi"],
+      "sources": [
+        "USDA FAS Grain and Feed Annual Algeria 2025",
+        "ITGC fiches techniques 2023-2024",
+        "FAO Land & Water Wheat Crop Information"
+      ]
+    },
+
+    {
+      "id": "barley",
+      "name_ar": "شعير",
+      "name_fr": "Orge",
+      "name_en": "Barley",
+      "name_darija": "shaeir / شعير",
+      "scientific_name": "Hordeum vulgare",
+      "category": "cereal",
+      "icon": "🌾",
+      "planting_calendar": {
+        "sow_months": ["October", "November", "December"],
+        "harvest_months": ["May", "June"],
+        "cycle_days": "180-220",
+        "notes_fr": "Plus rustique que le blé, mieux adapté aux zones semi-arides. Représente environ 33% de la surface céréalière algérienne."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "350-500",
+        "irrigation_type": "Pluvial principalement",
+        "critical_stages_fr": "Tallage et épiaison"
+      },
+      "diseases": [
+        { "name_fr": "Rouille naine", "name_ar": "الصدأ القزم", "scientific": "Puccinia hordei", "severity": "high" },
+        { "name_fr": "Helminthosporiose", "name_ar": "تبقع الأوراق", "scientific": "Pyrenophora teres", "severity": "high" },
+        { "name_fr": "Oïdium", "name_ar": "البياض الدقيقي", "scientific": "Blumeria graminis hordei", "severity": "medium" },
+        { "name_fr": "Charbon nu", "name_ar": "التفحم السائب", "scientific": "Ustilago nuda", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "13-15 q/ha",
+        "average_t_per_ha": "1.3-1.5",
+        "potential": "Jusqu'à 50 q/ha en irrigué",
+        "note_fr": "Rendement moyen national environ 13 q/ha (2016). Surface emblavée: 1.0-1.2 million ha."
+      },
+      "main_regions_fr": ["Oum El Bouaghi", "Tébessa", "Batna", "Djelfa", "Tiaret", "Sidi Bel Abbès"],
+      "sources": [
+        "Agrichem Algerie - agrichem.dz/culture/6/orge",
+        "USDA FAS Grain and Feed Annual Algeria 2025"
+      ]
+    },
+
+    {
+      "id": "tomato",
+      "name_ar": "طماطم",
+      "name_fr": "Tomate",
+      "name_en": "Tomato",
+      "name_darija": "tomatim / طماطم",
+      "scientific_name": "Solanum lycopersicum",
+      "category": "vegetable",
+      "icon": "🍅",
+      "planting_calendar": {
+        "sow_months": ["January", "February", "March"],
+        "transplant_months": ["February", "March", "April"],
+        "harvest_months": ["June", "July", "August", "September"],
+        "cycle_days": "120-180",
+        "notes_fr": "Tomate industrielle: semis février-mars, récolte juillet-septembre (Chlef, Skikda, Annaba). Tomate sous serre (Biskra): cycle décalé pour primeurs hivernaux."
+      },
+      "water_needs": {
+        "total_m3_per_ha": "4000-5000",
+        "daily_mm": "5 mm/jour pendant le cycle",
+        "irrigation_type": "Goutte-à-goutte recommandé; aspersion possible",
+        "critical_stages_fr": "Floraison et grossissement des fruits"
+      },
+      "diseases": [
+        { "name_fr": "Mildiou", "name_ar": "البياض الزغبي", "scientific": "Phytophthora infestans", "severity": "high" },
+        { "name_fr": "Tuta absoluta (mineuse)", "name_ar": "حافرة أوراق الطماطم", "scientific": "Tuta absoluta", "severity": "high" },
+        { "name_fr": "Oïdium", "name_ar": "البياض الدقيقي", "scientific": "Leveillula taurica", "severity": "medium" },
+        { "name_fr": "Aleurodes (mouche blanche)", "name_ar": "الذبابة البيضاء", "scientific": "Bemisia tabaci", "severity": "high" },
+        { "name_fr": "Fusariose", "name_ar": "الفيوزاريوم", "scientific": "Fusarium oxysporum f. sp. lycopersici", "severity": "medium" },
+        { "name_fr": "Virus TYLCV (jaunissement)", "name_ar": "فيروس تجعد واصفرار أوراق الطماطم", "scientific": "Tomato Yellow Leaf Curl Virus", "severity": "high" }
+      ],
+      "yield": {
+        "average": "500-700 q/ha (plein champ)",
+        "average_t_per_ha": "50-70",
+        "potential": "1000+ q/ha (100+ t/ha) sous serre intensive",
+        "note_fr": "Tomate industrielle moyenne ~50 t/ha. Tomate sous serre à Biskra peut dépasser 100 t/ha."
+      },
+      "main_regions_fr": ["Biskra (sous serre)", "Chlef", "Skikda", "Annaba", "Guelma", "El Tarf", "Mostaganem"],
+      "sources": [
+        "ITCMI (Institut Technique des Cultures Maraîchères et Industrielles)",
+        "Études Université Mohamed Khider Biskra 2015-2017",
+        "Algerie-Eco rapports filière tomate"
+      ]
+    },
+
+    {
+      "id": "olive",
+      "name_ar": "زيتون",
+      "name_fr": "Olivier",
+      "name_en": "Olive",
+      "name_darija": "zitoun / زيتون",
+      "scientific_name": "Olea europaea",
+      "category": "tree_crop",
+      "icon": "🫒",
+      "planting_calendar": {
+        "sow_months": ["February", "March", "April"],
+        "harvest_months": ["October", "November", "December", "January", "February"],
+        "cycle_days": "Pérenne (production à partir de 4-5 ans)",
+        "notes_fr": "Olive de table: récolte septembre-décembre. Olive à huile: décembre-mars. Floraison en mai. Phénomène d'alternance de production."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "400-800",
+        "rainfed_minimum": "400-600 mm pour rendements raisonnables; 600-800 mm pour hauts rendements",
+        "irrigation_type": "Pluvial principalement; irrigation goutte-à-goutte de plus en plus fréquente",
+        "critical_stages_fr": "Floraison (mai) et durcissement du noyau (juillet-août)"
+      },
+      "diseases": [
+        { "name_fr": "Œil de paon (tavelure)", "name_ar": "عين الطاووس", "scientific": "Spilocaea oleaginea / Cycloconium oleaginum", "severity": "high" },
+        { "name_fr": "Mouche de l'olivier", "name_ar": "ذبابة الزيتون", "scientific": "Bactrocera oleae", "severity": "high" },
+        { "name_fr": "Fumagine (noir)", "name_ar": "السخام", "scientific": "Capnodium spp.", "severity": "medium" },
+        { "name_fr": "Cochenille noire", "name_ar": "الحشرة القشرية السوداء", "scientific": "Saissetia oleae", "severity": "medium" },
+        { "name_fr": "Verticilliose", "name_ar": "ذبول الفرتيسيليوم", "scientific": "Verticillium dahliae", "severity": "high" },
+        { "name_fr": "Teigne de l'olivier", "name_ar": "عثة الزيتون", "scientific": "Prays oleae", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "15-30 kg/arbre",
+        "average_t_per_ha": "1.5-3.0 (selon densité)",
+        "potential": "50-65 kg/arbre en irrigué intensif",
+        "note_fr": "Algérie: 9eme producteur mondial d'huile d'olive (~92,200 tonnes en 2019/20). Variabilité forte due à l'alternance."
+      },
+      "main_regions_fr": ["Béjaïa", "Tizi Ouzou", "Bouira", "Sidi Bel Abbès", "Mascara", "Tlemcen", "Médéa"],
+      "sources": [
+        "FAO Land & Water Olive Crop Information",
+        "International Olive Council 2020/21 data",
+        "Agrichem Algerie - Tavelure de l'olivier",
+        "FAOSTAT 2019"
+      ]
+    },
+
+    {
+      "id": "date_palm",
+      "name_ar": "نخيل التمر",
+      "name_fr": "Palmier dattier",
+      "name_en": "Date palm",
+      "name_darija": "nakhla / نخلة",
+      "scientific_name": "Phoenix dactylifera",
+      "category": "tree_crop",
+      "icon": "🌴",
+      "planting_calendar": {
+        "sow_months": ["February", "March", "April"],
+        "harvest_months": ["September", "October", "November"],
+        "cycle_days": "Pérenne (production à partir de 5-7 ans)",
+        "notes_fr": "Pollinisation manuelle en mars-avril. Variété principale: Deglet Nour. Récolte par étapes selon maturité."
+      },
+      "water_needs": {
+        "total_mm_per_year": "1500-2500",
+        "daily_summer": "200-300 L par arbre par jour en été",
+        "irrigation_type": "Irrigation gravitaire ou goutte-à-goutte (foggaras traditionnelles dans certaines oasis)",
+        "critical_stages_fr": "Croissance des fruits (juin-septembre)"
+      },
+      "diseases": [
+        { "name_fr": "Bayoud (fusariose vasculaire)", "name_ar": "البيوض", "scientific": "Fusarium oxysporum f. sp. albedinis", "severity": "critical" },
+        { "name_fr": "Boufaroua (acariose)", "name_ar": "بوفروة", "scientific": "Oligonychus afrasiaticus", "severity": "high" },
+        { "name_fr": "Khamej (pourriture de l'inflorescence)", "name_ar": "الخامج", "scientific": "Mauginiella scaettae", "severity": "high" },
+        { "name_fr": "Cochenille blanche", "name_ar": "الحشرة القشرية البيضاء", "scientific": "Parlatoria blanchardi", "severity": "medium" },
+        { "name_fr": "Pyrale des dattes", "name_ar": "دودة التمر", "scientific": "Ectomyelois ceratoniae", "severity": "high" }
+      ],
+      "yield": {
+        "average": "15-30 kg/arbre",
+        "average_t_per_ha": "2-4 (avec ~100 arbres/ha)",
+        "potential": "50-60 kg/arbre (Tunisie, Egypte)",
+        "note_fr": "30% des palmiers algériens ont dépassé l'âge de production avec rendement <=15 kg/arbre. Production nationale ~1.1 million tonnes."
+      },
+      "main_regions_fr": ["Biskra", "El Oued", "Ouargla", "Adrar", "Ghardaïa", "Touggourt", "Tamanrasset"],
+      "sources": [
+        "ITDAS (Institut Technique de Développement de l'Agronomie Saharienne)",
+        "IRD Editions - Biotechnologies du palmier dattier",
+        "Recherches sur le Bayoud (Benzohra 2022)"
+      ]
+    },
+
+    {
+      "id": "potato",
+      "name_ar": "بطاطا",
+      "name_fr": "Pomme de terre",
+      "name_en": "Potato",
+      "name_darija": "btata / بطاطا",
+      "scientific_name": "Solanum tuberosum",
+      "category": "vegetable",
+      "icon": "🥔",
+      "planting_calendar": {
+        "main_season_planting": ["February", "March", "April"],
+        "main_season_harvest": ["June", "July"],
+        "late_season_planting": ["August", "September"],
+        "late_season_harvest": ["November", "December"],
+        "cycle_days": "90-120",
+        "notes_fr": "Trois saisons en Algérie: primeur (plantation décembre-février, récolte avril-mai), saison (février-juillet), arrière-saison (août-décembre)."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "500-700",
+        "irrigation_type": "Aspersion (majoritaire), goutte-à-goutte (de plus en plus)",
+        "critical_stages_fr": "Tubérisation (40-70 jours après plantation)"
+      },
+      "diseases": [
+        { "name_fr": "Mildiou", "name_ar": "البياض الزغبي", "scientific": "Phytophthora infestans", "severity": "critical" },
+        { "name_fr": "Alternariose", "name_ar": "تبقع الأوراق", "scientific": "Alternaria solani", "severity": "high" },
+        { "name_fr": "Rhizoctone brun", "name_ar": "الريزوكتون", "scientific": "Rhizoctonia solani", "severity": "medium" },
+        { "name_fr": "Gale commune", "name_ar": "الجرب العادي", "scientific": "Streptomyces scabies", "severity": "medium" },
+        { "name_fr": "Flétrissement bactérien", "name_ar": "الذبول البكتيري", "scientific": "Ralstonia solanacearum", "severity": "high" },
+        { "name_fr": "Virus PVY", "name_ar": "فيروس Y", "scientific": "Potato Virus Y", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "250-300 q/ha",
+        "average_t_per_ha": "25-30",
+        "potential": "400+ q/ha (40+ t/ha) en conditions optimales",
+        "note_fr": "Production nationale 2023: ~4.2 millions de tonnes (42 millions de quintaux). Le mildiou peut entraîner des pertes de 70-80% en cas de printemps humide."
+      },
+      "main_regions_fr": ["Mascara", "Mostaganem", "Aïn Defla", "Bouira", "Skikda", "El Oued"],
+      "sources": [
+        "Agrichem Algerie - agrichem.dz/culture/14/pomme-de-terre",
+        "ITCMI - fiches techniques",
+        "MADR - bilan campagne 2022-2023"
+      ]
+    },
+
+    {
+      "id": "onion",
+      "name_ar": "بصل",
+      "name_fr": "Oignon",
+      "name_en": "Onion",
+      "name_darija": "bsel / بصل",
+      "scientific_name": "Allium cepa",
+      "category": "vegetable",
+      "icon": "🧅",
+      "planting_calendar": {
+        "autumn_sowing": ["September", "October"],
+        "spring_sowing": ["January", "February", "March"],
+        "harvest_months": ["April", "May", "June", "July"],
+        "cycle_days": "120-180",
+        "notes_fr": "Photopériode critique: bulbaison déclenchée par jours longs (12-16h) et températures > 18°C. Variétés: jaunes, rouges, blanches."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "350-550",
+        "irrigation_type": "Aspersion ou goutte-à-goutte",
+        "critical_stages_fr": "Bulbaison (mois 2-3)"
+      },
+      "diseases": [
+        { "name_fr": "Mildiou", "name_ar": "البياض الزغبي", "scientific": "Peronospora destructor", "severity": "high" },
+        { "name_fr": "Botrytis", "name_ar": "العفن الرمادي", "scientific": "Botrytis squamosa / B. allii", "severity": "high" },
+        { "name_fr": "Sclérotinia", "name_ar": "السكليروتينيا", "scientific": "Sclerotium cepivorum", "severity": "medium" },
+        { "name_fr": "Rouille", "name_ar": "الصدأ", "scientific": "Puccinia allii", "severity": "medium" },
+        { "name_fr": "Mouche de l'oignon", "name_ar": "ذبابة البصل", "scientific": "Delia antiqua", "severity": "medium" },
+        { "name_fr": "Thrips", "name_ar": "التريبس", "scientific": "Thrips tabaci", "severity": "high" }
+      ],
+      "yield": {
+        "average": "300 q/ha (traditionnel) - 600 q/ha (irrigué moderne)",
+        "average_t_per_ha": "30-60",
+        "potential": "100+ t/ha chez les meilleurs producteurs mondiaux",
+        "note_fr": "Algérie: 1.6-1.76 millions de tonnes (top 10 mondial selon FAO 2022). Pertes post-récolte importantes par manque de stockage frigorifique."
+      },
+      "main_regions_fr": ["Tiaret (Rechaïga)", "Mascara", "Aflou", "El Oued", "Aïn Defla"],
+      "sources": [
+        "FAOSTAT 2022 - Algeria onion production",
+        "TSA Algerie - reportages filière oignon 2024",
+        "Yara - Production mondiale d'oignon"
+      ]
+    },
+
+    {
+      "id": "pepper",
+      "name_ar": "فلفل",
+      "name_fr": "Piment / Poivron",
+      "name_en": "Pepper",
+      "name_darija": "felfel / فلفل",
+      "scientific_name": "Capsicum annuum",
+      "category": "vegetable",
+      "icon": "🌶️",
+      "planting_calendar": {
+        "sow_months": ["February", "March"],
+        "transplant_months": ["April", "May"],
+        "harvest_months": ["June", "July", "August", "September", "October"],
+        "cycle_days": "120-180",
+        "notes_fr": "Sous serre à Biskra: cycle décalé pour primeurs hivernaux. Utilisé en frais et transformé (Harissa, Paprika)."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "600-900",
+        "daily_mm": "2 mm/jour début de cycle, 4-6 mm/jour de la floraison à la récolte",
+        "irrigation_type": "Goutte-à-goutte recommandé; éviter de mouiller le feuillage",
+        "critical_stages_fr": "Floraison et grossissement des fruits"
+      },
+      "diseases": [
+        { "name_fr": "Mildiou", "name_ar": "البياض الزغبي", "scientific": "Phytophthora capsici", "severity": "high" },
+        { "name_fr": "Cercosporiose", "name_ar": "السركوسبورا", "scientific": "Cercospora capsici", "severity": "medium" },
+        { "name_fr": "Oïdium", "name_ar": "البياض الدقيقي", "scientific": "Leveillula taurica", "severity": "medium" },
+        { "name_fr": "Tuta absoluta", "name_ar": "حافرة الأوراق", "scientific": "Tuta absoluta", "severity": "high" },
+        { "name_fr": "Acariens", "name_ar": "العناكب الحمراء", "scientific": "Tetranychus / Polyphagotarsonemus latus", "severity": "high" },
+        { "name_fr": "Thrips", "name_ar": "التريبس", "scientific": "Frankliniella occidentalis", "severity": "medium" },
+        { "name_fr": "Pourriture apicale (cul noir)", "name_ar": "تعفن الطرف", "scientific": "Carence en calcium", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "260 q/ha",
+        "average_t_per_ha": "26",
+        "potential": "60+ t/ha sous serre intensive",
+        "note_fr": "Surface 2016: 22,000 ha entre serres et plein champ. Rendement moyen national ~26 t/ha."
+      },
+      "main_regions_fr": ["Biskra (sous serres)", "El Oued", "M'Sila", "Boumerdès", "Alger", "Mostaganem", "Tlemcen"],
+      "sources": [
+        "Agrichem Algerie - agrichem.dz/culture/27/piment-poivron",
+        "Profert - fiches techniques piment/poivron",
+        "Fiches techniques INRA Maroc"
+      ]
+    },
+
+    {
+      "id": "watermelon",
+      "name_ar": "دلاع",
+      "name_fr": "Pastèque",
+      "name_en": "Watermelon",
+      "name_darija": "della3 / دلاع",
+      "scientific_name": "Citrullus lanatus",
+      "category": "vegetable",
+      "icon": "🍉",
+      "planting_calendar": {
+        "sow_months_south": ["January", "February", "March"],
+        "sow_months_north": ["April", "May", "June"],
+        "harvest_months": ["May", "June", "July", "August", "September"],
+        "cycle_days": "90-120",
+        "notes_fr": "Sud (El Oued, sous serres): semis précoce pour primeurs. Nord: cycle classique. Greffage sur citrouille fréquent pour résistance et vigueur."
+      },
+      "water_needs": {
+        "total_mm_per_cycle": "400-600",
+        "irrigation_type": "Goutte-à-goutte fortement recommandé",
+        "critical_stages_fr": "Floraison et grossissement des fruits; sensible à la sécheresse"
+      },
+      "diseases": [
+        { "name_fr": "Fusariose vasculaire", "name_ar": "ذبول الفيوزاريوم", "scientific": "Fusarium oxysporum f. sp. niveum", "severity": "critical" },
+        { "name_fr": "Anthracnose", "name_ar": "الأنثراكنوز", "scientific": "Colletotrichum lagenarium", "severity": "high" },
+        { "name_fr": "Oïdium", "name_ar": "البياض الدقيقي", "scientific": "Podosphaera xanthii", "severity": "medium" },
+        { "name_fr": "Mildiou", "name_ar": "البياض الزغبي", "scientific": "Pseudoperonospora cubensis", "severity": "high" },
+        { "name_fr": "Didymella (chancre gommeux)", "name_ar": "الديديميلا", "scientific": "Didymella bryoniae", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "400-600 q/ha (plein champ)",
+        "average_t_per_ha": "40-60",
+        "potential": "1200 q/ha (120 t/ha) sous serre multi-chapelles avec plants greffés (variété Sugar Baby)",
+        "note_fr": "Production en forte expansion au sud (El Oued). Serres multi-chapelles permettent récoltes précoces."
+      },
+      "main_regions_fr": ["El Oued (Magrane)", "Biskra", "Adrar", "Ouargla", "Mostaganem", "Aïn Defla"],
+      "sources": [
+        "TSA Algerie - reportage filière pastèque 2024",
+        "INRA - fiche fusariose pastèque",
+        "Voltz Maraîchage - guide culture pastèque"
+      ]
+    },
+
+    {
+      "id": "citrus",
+      "name_ar": "حمضيات",
+      "name_fr": "Agrumes",
+      "name_en": "Citrus",
+      "name_darija": "limoun / tchina / تشينة",
+      "scientific_name": "Citrus spp.",
+      "category": "tree_crop",
+      "icon": "🍊",
+      "planting_calendar": {
+        "sow_months": ["February", "March", "April"],
+        "harvest_months": ["November", "December", "January", "February", "March", "April"],
+        "cycle_days": "Pérenne (production à partir de 4-5 ans)",
+        "notes_fr": "Variétés principales en Algérie: orange Maroc Late (67% des surfaces), Thomson Navel, clémentines, citrons. Floraison en avril-mai, récolte étalée selon variété."
+      },
+      "water_needs": {
+        "total_mm_per_year": "800-1200",
+        "irrigation_type": "Goutte-à-goutte ou microaspersion",
+        "critical_stages_fr": "Floraison (avril-mai) et grossissement des fruits (été)"
+      },
+      "diseases": [
+        { "name_fr": "Tristeza des agrumes", "name_ar": "تريستيزا الحمضيات", "scientific": "Citrus Tristeza Virus (CTV)", "severity": "critical" },
+        { "name_fr": "Mal secco", "name_ar": "المال سيكو", "scientific": "Plenodomus tracheiphilus", "severity": "high" },
+        { "name_fr": "Anthracnose", "name_ar": "الأنثراكنوز", "scientific": "Colletotrichum gloeosporioides", "severity": "medium" },
+        { "name_fr": "Cochenilles", "name_ar": "الحشرات القشرية", "scientific": "Aonidiella aurantii / Planococcus citri", "severity": "high" },
+        { "name_fr": "Fumagine", "name_ar": "السخام", "scientific": "Capnodium spp.", "severity": "medium" },
+        { "name_fr": "Pourriture des racines", "name_ar": "تعفن الجذور", "scientific": "Phytophthora citrophthora", "severity": "high" },
+        { "name_fr": "Mineuse des agrumes", "name_ar": "حافرة الأوراق", "scientific": "Phyllocnistis citrella", "severity": "medium" }
+      ],
+      "yield": {
+        "average": "200-250 q/ha",
+        "average_t_per_ha": "20-25",
+        "potential": "400+ q/ha en intensif (700 arbres/ha)",
+        "note_fr": "Production 2023-24: 1.8 million tonnes sur ~80,000 ha. Orange = 67% des surfaces, clémentine = 21%, citron = 11%."
+      },
+      "main_regions_fr": ["Blida (Mitidja)", "Tipaza", "Chlef", "Boumerdès", "Béjaïa", "Aïn Defla", "El Meniaa", "Ghardaïa"],
+      "sources": [
+        "AgriAlgerie - filière agrumes 2023-2024",
+        "MADR - statistiques agrumes Algérie",
+        "CMGP-CAS - fiche technique agrumes"
+      ]
+    }
+  ]
+}

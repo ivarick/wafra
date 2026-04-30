@@ -1,0 +1,8 @@
+fastapi>=0.111
+uvicorn[standard]>=0.29
+pillow>=10.0
+numpy>=1.24
+python-multipart>=0.0.9
+# Vision Transformer backend (replaces TFLite)
+torch>=2.2.0
+transformers>=4.40.0

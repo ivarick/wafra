@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaf Scan — Crop Disease Diagnosis</title>
+  <meta name="description" content="Photograph a leaf or fruit to instantly identify crop diseases and get treatment recommendations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0f0a;
+      --surface: #141710;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8ede3;
+      --muted: #6b7566;
+      --accent: #6fc84a;
+      --accent-dim: rgba(111,200,74,0.12);
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    header p {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    /* ─── Upload zone ─── */
+    #drop-zone {
+      border: 1.5px dashed rgba(111,200,74,0.3);
+      border-radius: 10px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    #drop-zone:hover, #drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+    #drop-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+    #drop-zone .icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    #drop-zone .label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    #drop-zone .label strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Camera button */
+    .camera-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .camera-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Preview */
+    #preview-wrap {
+      margin-top: 18px;
+      display: none;
+      position: relative;
+    }
+    #preview-wrap img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      max-height: 220px;
+    }
+    #clear-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      color: #fff;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    #clear-btn:hover { background: rgba(239,68,68,0.8); }
+
+    /* Analyse button */
+    #analyse-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--accent);
+      color: #0c0f0a;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      display: none;
+    }
+    #analyse-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    #analyse-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(12,15,10,0.3);
+      border-top-color: #0c0f0a;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Results ─── */
+    #result {
+      margin-top: 24px;
+      display: none;
+      animation: fadeUp 0.3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .result-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .stat-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .conf-bar-wrap {
+      margin-bottom: 14px;
+    }
+    .conf-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .conf-bar {
+      height: 5px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .conf-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--accent);
+      transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1), background 0.4s ease;
+    }
+    .conf-bar-fill.conf-amber { background: #f59e0b; }
+    .conf-bar-fill.conf-red   { background: #ef4444; }
+
+    .treatment-box {
+      background: rgba(111,200,74,0.06);
+      border: 1px solid rgba(111,200,74,0.18);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .treatment-box .t-label {
+      font-size: 0.68rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .treatment-box p {
+      font-size: 0.82rem;
+      color: #b5c4ad;
+      line-height: 1.6;
+    }
+
+    .uncertain-note {
+      margin-top: 10px;
+      font-size: 0.76rem;
+      color: #f59e0b;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      flex-direction: column;
+    }
+    .uncertain-note .u-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    /* Top 5 */
+    .top3 {
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+    .top3-title {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .top3-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      padding: 5px 0;
+    }
+    .top3-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .top3-item .t-name { color: var(--text); }
+    .top3-item .t-crop { color: var(--muted); font-size: 0.7rem; margin-top: 1px; }
+    .top3-item .t-conf { color: var(--accent); font-weight: 500; }
+    .top3-item.t-dim .t-name, .top3-item.t-dim .t-conf { opacity: 0.45; }
+    .t-rank {
+      display: inline-block;
+      width: 16px;
+      font-size: 0.65rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* Error */
+    #error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: #fca5a5;
+    }
+
+    /* Processing time */
+    .proc-time {
+      margin-top: 10px;
+      text-align: right;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    /* Crop selector */
+    .crop-selector-wrap {
+      margin-bottom: 18px;
+    }
+    .crop-selector-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .crop-selector-label .rec-badge {
+      background: rgba(111,200,74,0.15);
+      color: var(--accent);
+      font-size: 0.62rem;
+      padding: 1px 6px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+    #crop-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.84rem;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7566' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    #crop-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    #crop-select option {
+      background: #1a1f17;
+      color: var(--text);
+    }
+
+    /* Camera hidden input for mobile */
+    #camera-file { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌿 Leaf Scan</h1>
+  <p>Photograph a leaf or fruit — get an instant disease diagnosis</p>
+</header>
+
+<div class="card">
+
+  <!-- Crop selector -->
+  <div class="crop-selector-wrap">
+    <div class="crop-selector-label">
+      🌱 Select your crop <span class="rec-badge">Recommended</span>
+    </div>
+    <select id="crop-select">
+      <option value="">— Auto-detect (less accurate) —</option>
+    </select>
+  </div>
+
+  <!-- Upload zone -->
+  <div id="drop-zone" role="button" aria-label="Upload plant photo">
+    <input type="file" id="file-input" accept="image/*" />
+    <span class="icon">📷</span>
+    <div class="label">
+      <strong>Click or drag</strong> a photo here<br>
+      JPEG · PNG · WebP · up to 10 MB
+    </div>
+  </div>
+
+  <button class="camera-btn" id="camera-btn" type="button">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+    Take a photo with camera
+  </button>
+  <input type="file" id="camera-file" accept="image/*" capture="environment" />
+
+  <!-- Preview -->
+  <div id="preview-wrap">
+    <img id="preview-img" src="" alt="Selected plant photo" />
+    <button id="clear-btn" title="Remove photo">✕</button>
+  </div>
+
+  <!-- Analyse button -->
+  <button id="analyse-btn" type="button">
+    <span id="btn-label">Analyse Plant</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+
+  <!-- Error -->
+  <div id="error-msg"></div>
+
+  <!-- Results -->
+  <div id="result">
+    <div class="result-header">
+      <div class="result-title" id="res-disease">—</div>
+      <div class="badge" id="res-badge">—</div>
+    </div>
+
+    <div class="result-row">
+      <div class="stat">
+        <div class="stat-label">Crop</div>
+        <div class="stat-value" id="res-crop">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Status</div>
+        <div class="stat-value" id="res-status">—</div>
+      </div>
+    </div>
+
+    <div class="conf-bar-wrap">
+      <div class="conf-bar-label">
+        <span>Confidence</span>
+        <span id="res-conf-pct">—</span>
+      </div>
+      <div class="conf-bar">
+        <div class="conf-bar-fill" id="res-conf-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="treatment-box">
+      <div class="t-label">Recommended Treatment</div>
+      <p id="res-treatment">—</p>
+    </div>
+
+    <div class="uncertain-note" id="res-uncertain" style="display:none">
+      <div class="u-row" id="unc-conf" style="display:none">⚠ Low confidence — take a closer photo in natural light.</div>
+      <div class="u-row" id="unc-margin" style="display:none">🔀 Model is undecided between top-2 classes — check the list below.</div>
+    </div>
+
+    <div class="top3">
+      <div class="top3-title">Top 5 predictions</div>
+      <div id="res-top3"></div>
+    </div>
+
+    <div class="proc-time" id="res-time"></div>
+  </div>
+
+</div>
+
+<script>
+  const dropZone    = document.getElementById('drop-zone');
+  const fileInput   = document.getElementById('file-input');
+  const cameraBtn   = document.getElementById('camera-btn');
+  const cameraFile  = document.getElementById('camera-file');
+  const previewWrap = document.getElementById('preview-wrap');
+  const previewImg  = document.getElementById('preview-img');
+  const clearBtn    = document.getElementById('clear-btn');
+  const analyseBtn  = document.getElementById('analyse-btn');
+  const btnLabel    = document.getElementById('btn-label');
+  const spinner     = document.getElementById('spinner');
+  const errorMsg    = document.getElementById('error-msg');
+  const resultBox   = document.getElementById('result');
+
+  let selectedFile = null;
+
+  // Drag-over highlight
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f) setFile(f);
+  });
+
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+  cameraBtn.addEventListener('click', () => cameraFile.click());
+  cameraFile.addEventListener('change', () => { if (cameraFile.files[0]) setFile(cameraFile.files[0]); });
+  clearBtn.addEventListener('click', reset);
+
+  function setFile(f) {
+    if (!f.type.startsWith('image/')) { showError('Please select an image file.'); return; }
+    selectedFile = f;
+    const url = URL.createObjectURL(f);
+    previewImg.src = url;
+    previewWrap.style.display = 'block';
+    analyseBtn.style.display = 'block';
+    hideError();
+    hideResult();
+  }
+
+  function reset() {
+    selectedFile = null;
+    fileInput.value = '';
+    cameraFile.value = '';
+    previewWrap.style.display = 'none';
+    analyseBtn.style.display = 'none';
+    hideResult();
+    hideError();
+  }
+
+  analyseBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    setLoading(true);
+    hideError();
+    hideResult();
+
+    const formData = new FormData();
+    formData.append('image', selectedFile);
+
+    const selectedCrop = document.getElementById('crop-select').value;
+    const url = selectedCrop
+      ? `/diagnose?crop=${encodeURIComponent(selectedCrop)}`
+      : '/diagnose';
+
+    try {
+      const res = await fetch(url, { method: 'POST', body: formData });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: res.statusText }));
+        throw new Error(err.detail || 'Server error');
+      }
+      const data = await res.json();
+      renderResult(data);
+    } catch (err) {
+      showError(err.message || 'Could not reach the server. Is the API running?');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  function renderResult(d) {
+    document.getElementById('res-disease').textContent = d.disease;
+    document.getElementById('res-crop').textContent = d.crop;
+    document.getElementById('res-status').textContent = !d.diagnosis_supported
+      ? 'ℹ Crop recognized only'
+      : (d.healthy ? '✅ Healthy' : '⚠ Diseased');
+    document.getElementById('res-conf-pct').textContent = d.confidence_pct;
+
+    // Badge
+    const badge = document.getElementById('res-badge');
+    badge.textContent = d.severity_label;
+    badge.style.background = d.severity_color + '22';
+    badge.style.color = d.severity_color;
+    badge.style.border = `1px solid ${d.severity_color}44`;
+
+    // Confidence bar with colour coding
+    const fill = document.getElementById('res-conf-bar');
+    fill.classList.remove('conf-amber', 'conf-red');
+    if (d.confidence < 0.30) fill.classList.add('conf-red');
+    else if (d.confidence < 0.60) fill.classList.add('conf-amber');
+    setTimeout(() => { fill.style.width = (d.confidence * 100) + '%'; }, 50);
+
+    document.getElementById('res-treatment').textContent = d.advisory
+      ? `${d.treatment} ${d.advisory}`
+      : d.treatment;
+
+    // Granular uncertainty notes
+    const uncBox    = document.getElementById('res-uncertain');
+    const uncConf   = document.getElementById('unc-conf');
+    const uncMargin = document.getElementById('unc-margin');
+    const lowConf   = d.confidence < 0.24;
+    const lowMargin = d.margin !== undefined && d.margin < 0.09;
+    uncConf.style.display   = lowConf   ? 'flex' : 'none';
+    uncMargin.style.display = lowMargin ? 'flex' : 'none';
+    uncBox.style.display    = (lowConf || lowMargin) ? 'flex' : 'none';
+
+    // Top 5 predictions or crop detector alternatives
+    const list = (d.top5 && d.top5.length)
+      ? d.top5
+      : ((d.crop_candidates || []).map(c => ({
+          disease: c.supported ? 'Supported crop candidate' : 'Detected crop candidate',
+          crop: c.crop,
+          confidence_pct: c.confidence_pct
+        })));
+    const top3El = document.getElementById('res-top3');
+    top3El.innerHTML = list.map((t, i) => `
+      <div class="top3-item${i >= 3 ? ' t-dim' : ''}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="t-rank">#${i + 1}</span>
+          <div>
+            <div class="t-name">${t.disease}</div>
+            <div class="t-crop">${t.crop}</div>
+          </div>
+        </div>
+        <div class="t-conf">${t.confidence_pct}</div>
+      </div>
+    `).join('');
+
+    const selectedCrop = document.getElementById('crop-select').value;
+    const modeMap = {
+      user_selected: selectedCrop ? `Filtered to ${selectedCrop}` : 'Manual crop filter',
+      auto_detected: `Auto-detected crop (${d.crop_confidence_pct})`,
+      auto_supported_fallback: `Auto-detected supported fallback (${d.crop_confidence_pct})`,
+      full_scan: `Full scan fallback (${d.crop_confidence_pct} crop confidence)`
+    };
+    const modeNote = modeMap[d.crop_source] || 'Auto-detect';
+    document.getElementById('res-time').textContent =
+      `Processed in ${d.processing_ms} ms · 9-view TTA · ${modeNote}`;
+
+    resultBox.style.display = 'block';
+  }
+
+  function setLoading(on) {
+    analyseBtn.disabled = on;
+    btnLabel.style.display = on ? 'none' : 'inline';
+    spinner.style.display = on ? 'block' : 'none';
+  }
+
+  function showError(msg) { errorMsg.textContent = msg; errorMsg.style.display = 'block'; }
+  function hideError()    { errorMsg.style.display = 'none'; }
+  function hideResult()   { resultBox.style.display = 'none'; }
+
+  // Load supported crops from the backend on page load
+  (async () => {
+    try {
+      const res = await fetch('/crops');
+      const data = await res.json();
+      const sel = document.getElementById('crop-select');
+      data.crops.forEach(crop => {
+        const opt = document.createElement('option');
+        opt.value = crop.toLowerCase();
+        opt.textContent = crop;
+        sel.appendChild(opt);
+      });
+    } catch (e) {
+      console.warn('Could not load crop list:', e);
+    }
+  })();
+</script>
+
+</body>
+</html>
