@@ -116,60 +116,53 @@ Since the `PlantVillage` dataset is heavily unbalanced (e.g., 5,000 images of on
 
 ## 🚀 Getting Started
 
-### Running the Mobile App
-1. Install dependencies: `npm install`
-2. Configure `.env` with:
-   - `EXPO_PUBLIC_API_BASE_URL` (points to the Django or Disease API)
-   - `EXPO_PUBLIC_CHATBOT_URL` (points to the Chatbot API)
-3. Start Expo: `npx expo start`
+Follow these steps for a complete fresh installation and launch of the entire NABTA ecosystem.
 
-### Running the Microservices
-*Python 3.10+ required.*
+### 1. Prerequisites
+- **Node.js** (v18+) and **npm**
+- **Python 3.10+**
+- **PowerShell** (Ensure execution policies allow scripts: `Set-ExecutionPolicy -Scope Process Bypass`)
 
-If you cloned this repo from GitHub, the virtual environments are not included. Create them first:
+### 2. Configure Environment Variables
+1. **Frontend (`.env`)**: Create a `.env` file in the root directory. Replace `localhost` with your machine's IP address if testing on a physical mobile device.
+   ```env
+   EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
+   EXPO_PUBLIC_DISEASE_API_URL=http://localhost:8001
+   EXPO_PUBLIC_CHATBOT_URL=http://localhost:9000
+   ```
+2. **Chatbot API (`chatbot/.env.local`)**: Provide your API keys inside the `chatbot` folder.
+   ```env
+   GROQ_API_KEY="your-groq-key-here"
+   OPENWEATHER_API_KEY="your-weather-key-here"
+   ```
 
-```powershell
-.\setup_venvs.ps1
-```
+### 3. Setup and Launch the Backend (Microservices & Django)
+All three backend APIs (Django Core, FastAPI Chatbot, FastAPI Disease Vision) are fully automated for Windows.
 
-**Django Backend:**
-```bash
-cd backend
-python manage.py migrate
-python manage.py runserver 8080
-```
+1. **Setup all virtual environments and dependencies:**
+   ```powershell
+   .\setup_venvs.ps1
+   ```
+   *(Note: The `disease` microservice will download roughly 1.5GB of model weights on its first launch.)*
 
-**Chatbot API:**
-```bash
-cd chatbot
-pip install fastapi uvicorn httpx pydantic
-export GROQ_API_KEY="your-key-here"
-uvicorn main:app --host 0.0.0.0 --port 9000 --reload
-```
+2. **Launch all backend services simultaneously:**
+   ```powershell
+   .\start_green.ps1
+   ```
+   This script will automatically run Django migrations and open background terminals for all three APIs:
+   - **Django API:** http://localhost:8000
+   - **Disease API:** http://localhost:8001
+   - **Chatbot API:** http://localhost:9000
 
-**Disease API:**
-```bash
-cd disease
-pip install fastapi uvicorn torch torchvision transformers pillow numpy python-multipart
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-*(Note: The `disease` microservice will download roughly 1.5GB of model weights on its first launch.)*
+### 4. Setup and Launch the Frontend (Mobile App)
+Once the backend services are running, open a **new terminal** and run the following:
 
-On Windows PowerShell, activate the local venvs with:
-
-```powershell
-.\chatbot\.venv\Scripts\Activate.ps1
-.\disease\venv\Scripts\Activate.ps1
-```
-
-If PowerShell blocks activation, run:
-
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-```
-
-To start the two FastAPI services with the correct paths for this repo:
-
-```powershell
-.\start_green.ps1
-```
+1. **Install JavaScript dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the Expo server:**
+   ```bash
+   npx expo start
+   ```
+   Press **`w`** to open the app in your web browser or scan the QR code using the **Expo Go** app on your Android/iOS device.
